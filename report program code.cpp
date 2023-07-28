@@ -2,6 +2,7 @@
 #include<random>
 #include<vector>
 #include<fstream>
+#include<numeric>
 using namespace std;
 
 class firstround {
@@ -30,6 +31,11 @@ int total(int z1, int z2) {
     return w;
 }
 
+int total2(int sum1, int sum2) {
+    int sum= sum1/sum2;
+    return sum;
+}
+
 int main()
 {
     cout << "サッカーのPK戦を始めます。キッカーは１から3のエリアに蹴りこむことができ、キーパーもランダムで１から3のエリアに向かって動くことができる。\n";
@@ -40,11 +46,16 @@ int main()
     vector<int>count2;
     vector<int>count12;
     vector<int>count22;
+    vector<int>count13;
+    vector<int>count4;
+
+    int sum1 = 0;
+    int sum2 = 0;
 
     for (int t = 1;t <= 5;++t) {
 
         cout << "第" << t << "回戦\n";
-        cout << "チームAのキッカー１、1から3エリアのどこに蹴りこむかを決めてください。\n";
+        cout << "チームAのキッカー"<<t<<"は、1から3エリアのどこに蹴りこむかを決めてください。\n";
         int a;
         a = 0;
         cin >> a;
@@ -59,19 +70,23 @@ int main()
         cout << "キーパーの選択は\n";
         int n = dist1(engine);
         cout << n << endl;
-        {
-            if (a == n) {
-                cout << "PK失敗" << endl;
-                count1.push_back(0);
-            }
-            else {
-                cout << "PK成功！" << endl;
-                count1.push_back(1);
-                count12.push_back(1);
-            }
+
+        if (a == n) {
+            cout << "PK失敗" << endl;
+            count1.push_back(0);
+            count13.push_back(1);
         }
 
-        cout << "チームBのキッカー１、1から3エリアのどこに蹴りこむかを決めてください。\n";
+        else {
+            cout << "PK成功！" << endl;
+            count1.push_back(1);
+            count12.push_back(1);
+            count13.push_back(1);
+            count4.push_back(100);
+        }
+
+
+        cout << "チームBのキッカー"<<t<<"は、1から3エリアのどこに蹴りこむかを決めてください。\n";
         int b;
         b = 0;
         cin >> b;
@@ -90,6 +105,8 @@ int main()
                 cout << "PK成功！" << endl;
                 count2.push_back(1);
                 count22.push_back(1);
+                count13.push_back(1);
+                count4.push_back(100);
                 datafile << 1 << " " << 1 << endl;
                 datafile.close();
 
@@ -97,6 +114,7 @@ int main()
             else {
                 cout << "PK失敗" << endl;
                 count2.push_back(0);
+                count13.push_back(1);
                 datafile << 1 << " " << 0 << endl;
                 datafile.close();
 
@@ -107,14 +125,16 @@ int main()
             if (b == m) {
                 cout << "PK失敗" << endl;
                 count2.push_back(0);
+                count13.push_back(1);
                 datafile << 0 << " " << 0 << endl;
                 datafile.close();
-
             }
             else {
                 cout << "PK成功！" << endl;
                 count2.push_back(1);
                 count22.push_back(1);
+                count13.push_back(1);
+                count4.push_back(100);
                 datafile << 0 << " " << 1 << endl;
                 datafile.close();
             }
@@ -158,15 +178,14 @@ int main()
             int z2 = 0;
             int w = total(z1, z2);
             cout << w << "%" << endl;
-        }
+        }       
     }
     //第５回戦終了
-
 
     if (count12.size() == count22.size()) {
         for (int s = 5;++s;) {
             cout << "第" << s << "回戦\n";
-            cout << "チームAのキッカー１、1から3エリアのどこに蹴りこむかを決めてください。\n";
+            cout << "チームAのキッカー"<<s<<"は、から3エリアのどこに蹴りこむかを決めてください。\n";
             int e;
             e = 0;
             cin >> e;
@@ -184,14 +203,17 @@ int main()
             if (e == u) {
                 cout << "PK失敗" << endl;
                 count1.push_back(0);
+                count13.push_back(1);
             }
             else {
                 cout << "PK成功！" << endl;
                 count1.push_back(1);
                 count12.push_back(1);
+                count13.push_back(1);
+                count4.push_back(100);
             }
 
-            cout << "チームBのキッカー１、1から3エリアのどこに蹴りこむかを決めてください。\n";
+            cout << "チームBのキッカー"<<s<<"は、1から3エリアのどこに蹴りこむかを決めてください。\n";
             int f;
             f = 0;
             cin >> f;
@@ -209,6 +231,7 @@ int main()
                 if (f == r) {
                     cout << "PK失敗" << endl;
                     count2.push_back(0);
+                    count13.push_back(1);
                     fstream datafile("score.txt", ios_base::out);
                     datafile << 0 << " " << 0 << endl;
                     datafile.close();
@@ -217,10 +240,11 @@ int main()
                     cout << "PK成功！" << endl;
                     count2.push_back(1);
                     count22.push_back(1);
+                    count13.push_back(1);
+                    count4.push_back(100);
                     fstream datafile("score.txt", ios_base::out);
                     datafile << 0 << " " << 1 << endl;
                     datafile.close();
-
                 }
             }
 
@@ -229,6 +253,8 @@ int main()
                     cout << "PK成功！" << endl;
                     count2.push_back(1);
                     count22.push_back(1);
+                    count13.push_back(1);
+                    count4.push_back(100);
                     fstream datafile("score.txt", ios_base::out);
                     datafile << 1 << " " << 1 << endl;
                     datafile.close();
@@ -236,6 +262,7 @@ int main()
                 else {
                     cout << "PK失敗" << endl;
                     count2.push_back(0);
+                    count13.push_back(1);
                     fstream datafile("score.txt", ios_base::out);
                     datafile << 1 << " " << 0 << endl;
                     datafile.close();
@@ -288,7 +315,16 @@ int main()
     cout << "Bチーム合計：" << count22.size();
     cout << "\n";
 
-
+   
+    for (int k1 =0; k1 <count4.size(); k1++) {
+        sum1 += count4[k1];
+    }
+    for (int k2 = 0; k2 < count13.size(); k2++) {
+        sum2 += count13[k2];
+    }
+    int sum = total2(sum1, sum2);
+    cout << "今回の全体のシュートの成功確率は" << sum << "%です\n";
+    
 
     if (count12.size() > count22.size()) {
         cout << "Aチームの勝利！\n";
